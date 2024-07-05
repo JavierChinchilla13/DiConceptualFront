@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Vacations Page</title>
+    </h:head>
+    <h:body>
+
+        <h3>Page to see the information about your Vacations</h3>
+
+        <h:form id="form">
+            <p:growl id="message" showDetail="true"/>
+            <div class="card">
+
+                <p:tabMenu activeIndex="#{param.i}">
+
+                    <p:menuitem value="Home" outcome="landingPage" icon="pi pi-fw pi-home">
+                        <f:param name="i" value="0"/>
+                    </p:menuitem>
+                    <p:menuitem value="Users" outcome="user" icon="pi pi-fw pi-calendar">
+                        <f:param name="i" value="1"/>
+                    </p:menuitem>
+                    <p:menuitem value="Projects" outcome="projects" icon="pi pi-fw pi-calendar">
+                        <f:param name="i" value="2"/>
+                    </p:menuitem>
+                    <p:menuitem value="Vacations" outcome="vacations" icon="pi pi-fw pi-calendar">
+                        <f:param name="i" value="3"/>
+                    </p:menuitem>
+                    <p:menuitem value="Permits" outcome="permits" icon="pi pi-fw pi-calendar">
+                        <f:param name="i" value="4"/>
+                    </p:menuitem>
+                    <p:menuitem value="Documents" outcome="documents" icon="pi pi-fw pi-file">
+                        <f:param name="i" value="5"/>
+                    </p:menuitem>
+                    <p:menuitem value="Log Out" icon="pi pi-sign-out"  actionListener="#{employeeController.logOut()}">
+                        <f:param name="i" value="6"/>
+                    </p:menuitem>
+
+                </p:tabMenu>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                </p:confirmDialog>
+
+                <p:commandButton value="Ask for Vacations" icon="pi pi-plus" actionListener="#{vacationController.openNew()}"
+                                 update=":form:manage-user-content" oncomplete="PF('manageUserDialog').show()"
+                                 styleClass="ui-button-success" style="margin-right: .5rem; margin-top: .5rem">
+                    <p:resetInput target=":form:manage-user-content"/>
+                </p:commandButton>
+
+                <p:commandButton value="Review Vacation Request" icon="pi pi-check" rendered="#{employeeController.isAdmin || employeeController.isManager}" actionListener="#{vacationController.reviewVacationRequest()}"
+                                 styleClass="ui-button-success" style="margin-right: .10rem">
+                    <p:resetInput target=":form:manage-user-content"/>
+                </p:commandButton>
+
+                <h3>You have #{ vacationController.getVacationDaysOff(employeeController.id) + vacationController.getVacationDaysOfEmployee(employeeController.id)} vacation days left </h3>
+
+                <p:dialog header="Vacation detail" showEffect="fade" modal="true"
+                          widgetVar="manageUserDialog" responsive="true">
+                    <p:outputPanel id="manage-user-content" class="ui-fluid">
+
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel for="startDate" value="Start Date"/>
+                            <p:calendar id="startDate"  value="#{vacationController.calendarFireDate}" readonlyInput="true" />
+                        </div>
+
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel for="endDate" value="End Date"/>
+                            <p:calendar id="endDate" value="#{vacationController.calendarFireDate2}" readonlyInput="true" />
+                        </div>
+
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Request Vacation" icon="pi pi-check" actionListener="#{vacationController.saveSchedueleVacation(employeeController.id)}"
+                                         update="form manage-user-content" process="manage-user-content @this">
+                            <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+                    </f:facet>
+                </p:dialog>
+
+                <p:dataTable var="vacations" value="#{vacationController.getNewScheduleVacations(employeeController.id)}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
+                             {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No Vacations">
+
+                    <p:column headerText="Start Date" sortBy="#{vacations.startDate}" filterBy="#{vacations.startDate}" filterMatchMode="contains">
+                        <h:outputText value="#{vacations.startDate}"/>
+                    </p:column>
+
+                    <p:column headerText="End Date" sortBy="#{vacations.endDate}" filterBy="#{vacations.endDate}" filterMatchMode="contains">
+                        <h:outputText value="#{vacations.endDate}"/>
+                    </p:column>
+
+                    <p:column headerText="Status" sortBy="#{vacationController.statusToStrStatus(vacations.idStatus)}" filterBy="#{vacationController.statusToStrStatus(vacations.idStatus)}" filterMatchMode="contains">
+                        <h:outputText value="#{vacationController.statusToStrStatus(vacations.idStatus)}"/>
+                    </p:column>
+
+                    <p:column headerText="Description" sortBy="#{vacations.description}" filterBy="#{vacations.description}" filterMatchMode="contains">
+                        <h:outputText value="#{vacations.description}"/>
+                    </p:column>
+
+                    <p:column headerText="Delete">
+                        <p:commandButton icon="pi pi-times" update="form" styleClass="rounded-button ui-button-danger"
+                                         actionListener="#{vacationController.deleteScheduleVacation(vacations.id)}">
+                            <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:commandButton value="Show all Vacation Request" icon="pi pi-eye" rendered="#{employeeController.isAdmin}"
+                                 update=":form:admin-all-vacations-view" oncomplete="PF('allVacationsDialog').show()"
+                                 styleClass="ui-button-info" style="margin-right: .5rem; margin-top: .75rem" >
+                    <p:resetInput target=":form:admin-all-vacations-view"/>
+                </p:commandButton>
+
+                <p:dialog header="All Vacations" showEffect="fade" hideEffect="fade" modal="true"
+                          widgetVar="allVacationsDialog" responsive="true">
+                    <p:outputPanel id="admin-all-vacations-view" class="ui-fluid">
+
+                        <p:dataTable var="Vacation" value="#{vacationController.getOldScheduleVacations(employeeController.id)}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
+                                     {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     emptyMessage="No Vacations">
+
+                            <p:column headerText="Start Date" sortBy="#{Vacation.startDate}" filterBy="#{Vacation.startDate}" filterMatchMode="contains">
+                                <h:outputText value="#{Vacation.startDate}"/>
+                            </p:column>
+
+                            <p:column headerText="End Date" sortBy="#{Vacation.endDate}" filterBy="#{Vacation.endDate}" filterMatchMode="contains">
+                                <h:outputText value="#{Vacation.endDate}"/>
+                            </p:column>
+
+                            <p:column headerText="Status" sortBy="#{vacationController.statusToStrStatus(Vacation.idStatus)}" filterBy="#{vacationController.statusToStrStatus(Vacation.idStatus)}" filterMatchMode="contains">
+                                <h:outputText value="#{vacationController.statusToStrStatus(Vacation.idStatus)}"/>
+                            </p:column>
+
+                            <p:column headerText="Description" sortBy="#{Vacation.description}" filterBy="#{Vacation.description}" filterMatchMode="contains">
+                                <h:outputText value="#{Vacation.description}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+
+                    </p:outputPanel>  
+
+
+
+                </p:dialog>
+
+            </div>           
+        </h:form>
+    </h:body>
+</html>
