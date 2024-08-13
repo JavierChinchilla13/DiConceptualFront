@@ -3,8 +3,6 @@ import com.mycompany.edu.ulatina.hth_db_connetion.DocumentService;
 import com.mycompany.edu.ulatina.hth_db_connetion.DocumentTO;
 import com.mycompany.edu.ulatina.hth_db_connetion.EmployeeService;
 import com.mycompany.edu.ulatina.hth_db_connetion.EmployeeTO;
-import com.mycompany.edu.ulatina.hth_db_connetion.PermitService;
-import com.mycompany.edu.ulatina.hth_db_connetion.PermitTO;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
