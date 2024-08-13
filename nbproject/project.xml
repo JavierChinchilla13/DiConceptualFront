@@ -9,18 +9,6 @@
                 <library dirs="200">
                     <file>${libs.jsf20.classpath}</file>
                 </library>
-                <library dirs="200">
-                    <file>${file.reference.drive-download-20231122T002642Z-001.zip}</file>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.mysql-connector-java-8.0.16.jar}</file>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.primefaces-11.0.0-RC1.jar}</file>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.edu.ulatina.HTH_DB_Connetion-1.0-SNAPSHOT.jar-1}</file>
-                </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
