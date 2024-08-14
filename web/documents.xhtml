@@ -79,7 +79,7 @@
 
                         <p:dataTable id="Employees" var="Employee" value="#{employeeController.employees}" rendered="#{employeeController.isAdmin}" paginator="true" rows="3" paginatorTemplate="{CurrentPageReport} 
                                      {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No register users"  >
+                                     rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No register users" paginatorPosition="bottom" >
                             <f:facet name="header"> Employee List </f:facet>
 
                             <p:column headerText="Name" sortBy="#{Employee.fullName}" filterBy="#{Employee.fullName}" filterMatchMode="contains">
@@ -120,7 +120,7 @@
 
                         <p:dataTable var="Document" value="#{employeeController.getDocumentsOf(employeeController.selectedEmployee.id)}" paginator="true" rows="3" paginatorTemplate="{CurrentPageReport} 
                                      {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     emptyMessage="No documets">
+                                     emptyMessage="No documets" paginatorPosition="bottom">
 
                             <p:column headerText="Name" sortBy="#{Document.name}" filterBy="#{Document.name}" filterMatchMode="contains">
                                 <h:outputText value="#{Document.name}"/>
