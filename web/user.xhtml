@@ -351,7 +351,7 @@
 
                         <p:dataTable var="Employee" value="#{employeeController.getSubordinates(employeeController.id)}"  paginator="true" rows="3" paginatorTemplate="{CurrentPageReport} 
                                      {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     emptyMessage="No register users"  >
+                                     emptyMessage="No register users" paginatorPosition="bottom" >
 
 
                             <p:column headerText="Name" sortBy="#{Employee.fullName}" filterBy="#{Employee.fullName}" filterMatchMode="contains">
