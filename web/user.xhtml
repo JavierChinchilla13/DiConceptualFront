@@ -37,7 +37,7 @@
 
                 <p:dataTable var="Employee" value="#{employeeController.activeEmployees}" rendered="#{employeeController.isManager || employeeController.isEmployee}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No existen usuarios registrados">
+                             rowsPerPageTemplate="3,5,10,20,30,40,50" paginatorPosition="bottom"  emptyMessage="No existen usuarios registrados">
 
                     <p:column headerText="Name" sortBy="#{Employee.fullName}" filterBy="#{Employee.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{Employee.fullName}"/>
@@ -63,7 +63,7 @@
 
                 <p:dataTable id="Employees" var="Employee" value="#{employeeController.employees}" rendered="#{employeeController.isAdmin}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No register users"  >
+                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No register users" paginatorPosition="bottom" >
                     <f:facet name="header"> Employee List </f:facet>
 
                     <p:column headerText="Name" sortBy="#{Employee.fullName}" filterBy="#{Employee.fullName}" filterMatchMode="contains">
