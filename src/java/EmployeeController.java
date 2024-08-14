@@ -29,16 +29,6 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
 
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author javi
- */
-//HOLA SOY JAVIER
 @ManagedBean(name = "employeeController")
 @SessionScoped
 public class EmployeeController implements Serializable {
