@@ -7,12 +7,14 @@
     <h:head>
         <title>Facelet Title</title>
     </h:head>
-    <h:body>
-        <h:form>
-            Welcome to HTH
+    <h:body style="background: gray">
+        <h:form >
             <p:growl id="message" showDetail="true"/>
-
-            <p:panelGrid columns="2">
+            <div style="text-align: center;">
+                <img src="resources/images/image-removebg-preview.png" alt=""/>
+            </div>
+            
+            <p:panelGrid columns="2" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px;">
                 User:  <p:inputText value="#{employeeController.user}" />
                 Password:  <p:password value="#{employeeController.pasword}" />
                 <h:outputText></h:outputText>

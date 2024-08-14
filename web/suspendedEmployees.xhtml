@@ -3,51 +3,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Suspended Workers</title>
     </h:head>
     <h:body>
-        <h3>Suspended Employees</h3>
+        
+        <h:form id="menu">
+            <ui:include src="menu.xhtml"/>
+        </h:form>
+        
         <p:growl id="message" showDetail="true"/>
         <h:form id="form">
             <div class="card">
-
-                <p:tabMenu activeIndex="#{param.i}">
-                    <p:menuitem value="Home" outcome="landingPage" icon="pi pi-fw pi-home">
-                        <f:param name="i" value="0"/>
-                    </p:menuitem>
-                    <p:menuitem value="Suspended Employees" outcome="suspendedEmployees" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="1"/>
-                    </p:menuitem>
-                    <p:menuitem value="Projects" outcome="projects" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="2"/>
-                    </p:menuitem>
-                    <p:menuitem value="Vacations" outcome="vacations" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="3"/>
-                    </p:menuitem>
-                    <p:menuitem value="Permits" outcome="permits" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="4"/>
-                    </p:menuitem>
-                    <p:menuitem value="Documents" outcome="documents" icon="pi pi-fw pi-file">
-                        <f:param name="i" value="5"/>
-                    </p:menuitem>
-                    <p:menuitem value="Log Out" icon="pi pi-sign-out"  actionListener="#{employeeController.logOut()}">
-                        <f:param name="i" value="6"/>
-                    </p:menuitem>
-
-                </p:tabMenu>
 
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
                 </p:confirmDialog>
-
-                <p:commandButton value="Return" icon="pi pi-arrow-down-left" actionListener="#{employeeController.returnUser()}"
-
-                                 styleClass="ui-button-success" style="margin-right: .10rem">
-                    <p:resetInput target=":form:manage-user-content"/>
-                </p:commandButton>
 
 
                 <p:dataTable id="Employees" var="Employee" value="#{employeeController.suspendedEmployees}" rendered="#{employeeController.isAdmin}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
@@ -155,6 +129,12 @@
                 </p:dialog>
 
 
+
+                <p:commandButton value="Return" icon="pi pi-arrow-down-left" actionListener="#{employeeController.returnUser()}"
+
+                                 styleClass="ui-button-success" style="margin-right: .10rem">
+                    <p:resetInput target=":form:manage-user-content"/>
+                </p:commandButton>
 
             </div>           
         </h:form>
