@@ -3,39 +3,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>User</title>
     </h:head>
     <h:body>
-        <h3>Welcome to HTH,  #{employeeController.firstName}</h3>
-        <p:growl id="message" showDetail="true"/>
+        
+        <h:form id="menu">
+            <ui:include src="menu.xhtml"/>
+        </h:form>
+        
         <h:form id="form">
             <p:growl id="message" showDetail="true"/>
-            <div class="card">
-
-                <p:tabMenu activeIndex="#{param.i}">
-                    <p:menuitem value="Home" outcome="landingPage" icon="pi pi-fw pi-home">
-                        <f:param name="i" value="0"/>
-                    </p:menuitem>
-                    <p:menuitem value="Users" outcome="user" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="1"/>
-                    </p:menuitem>
-                    
-                    <p:menuitem value="Vacations" outcome="vacations" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="3"/>
-                    </p:menuitem>
-                    
-                    <p:menuitem value="Documents" outcome="documents" icon="pi pi-fw pi-file">
-                        <f:param name="i" value="5"/>
-                    </p:menuitem>
-                    <p:menuitem value="Log Out" icon="pi pi-sign-out"  actionListener="#{employeeController.logOut()}">
-                        <f:param name="i" value="6"/>
-                    </p:menuitem>
-
-                </p:tabMenu>
-
-                <br/>
 
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
@@ -57,7 +37,7 @@
 
                 <p:dataTable var="Employee" value="#{employeeController.activeEmployees}" rendered="#{employeeController.isManager || employeeController.isEmployee}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No existen usuarios registrados">
+                             rowsPerPageTemplate="3,5,10,20,30,40,50" paginatorPosition="bottom"  emptyMessage="No existen usuarios registrados">
 
                     <p:column headerText="Name" sortBy="#{Employee.fullName}" filterBy="#{Employee.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{Employee.fullName}"/>
@@ -81,11 +61,9 @@
 
                 </p:dataTable>
 
-
-
                 <p:dataTable id="Employees" var="Employee" value="#{employeeController.employees}" rendered="#{employeeController.isAdmin}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No register users"  >
+                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No register users" paginatorPosition="bottom" >
                     <f:facet name="header"> Employee List </f:facet>
 
                     <p:column headerText="Name" sortBy="#{Employee.fullName}" filterBy="#{Employee.fullName}" filterMatchMode="contains">
@@ -137,77 +115,13 @@
                             <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
                         </p:commandButton>
                     </p:column>
-                    
-                    <p:column headerText="Feedback" >
-                        <p:commandButton icon="pi pi-eye" update="form:feedback-options" styleClass="rounded-button ui-button-info"
-                                         oncomplete="PF('feedbackOptionsDialog').show()" process="@this">
-                            <f:setPropertyActionListener value="#{Employee}" target="#{projectController.selectedEmployee}"/>
-                        </p:commandButton>
-                    </p:column>  
 
                 </p:dataTable>
-                
-                <p:dialog  showEffect="fade" modal="true" header="Feedback" 
-                           widgetVar="feedbackOptionsDialog" responsive="true">
-                    <p:outputPanel id="feedback-options" class="ui-fluid">
-
-                        <p:outputPanel>
-
-                            <p:commandButton value="Add feedback" icon="pi pi-plus" rendered="#{employeeController.isAdmin || employeeController.isManager}" 
-                                             update=":form:feedback-options" oncomplete="PF('addPEFeedback').show()"
-                                             styleClass="ui-button-success" process="@this">
-                                
-                            </p:commandButton>
-                            
-
-                            <p:dataTable var="Feedback" value="#{projectController.EFeedbackFrom}" paginator="true" rows="4" paginatorTemplate="{CurrentPageReport} 
-                                         {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         emptyMessage="No Feedback">
-
-                                <p:column headerText=" Feedback Name" sortBy="#{Feedback.name}" filterBy="#{Feedback.name}" filterMatchMode="contains">
-                                    <h:outputText value="#{Feedback.name}"/>
-                                </p:column>
-
-                                <p:column headerText="Description" sortBy="#{Feedback.description}" filterBy="#{Feedback.description}" filterMatchMode="contains">
-                                    <h:outputText value="#{Feedback.description}"/>
-                                </p:column>
-                                <p:column headerText="Date" sortBy="#{Feedback.dateOfFeedback}" filterBy="#{Feedback.dateOfFeedback}" filterMatchMode="contains">
-                                    <h:outputText value="#{Feedback.dateOfFeedback}"/>
-                                </p:column>
-                                <p:column headerText="Creator" sortBy="#{employeeController.idToStrStatus(Feedback.idCreator)}" filterBy="#{employeeController.idToStrStatus(Feedback.idCreator)}" filterMatchMode="contains">
-                                    <h:outputText value="#{employeeController.idToStrStatus(Feedback.idCreator)}"/>
-                                </p:column>
-                                <p:column headerText="Status" sortBy="#{projectController.statusToStr(Feedback.idStatus)}" filterBy="#{projectController.statusToStr(Feedback.idStatus)}" filterMatchMode="contains">
-                                    <h:outputText value="#{projectController.statusToStr(Feedback.idStatus)}"/>
-                                </p:column>
-                                 <p:column headerText="Edit">
-                                    <p:commandButton icon="pi pi-pencil" update=":form:update-pe-feedback" 
-                                                     oncomplete="PF('updatePEFeedback').show()"
-                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                        <f:setPropertyActionListener value="#{Feedback}" target="#{projectController.selectedFeedback}"/>
-                                        <p:resetInput target=":form:update-pe-feedback"/>
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column headerText="Delete">
-                                    <p:commandButton icon="pi pi-times" update=":form:feedback-options" styleClass="rounded-button ui-button-danger"
-                                                     actionListener="#{projectController.deleteFeedback(Feedback.id)}">
-                                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
-                                    </p:commandButton>
-                                </p:column>
-                                
-                                
-
-
-
-
-                            </p:dataTable>
-
-                        </p:outputPanel>
-
-                    </p:outputPanel>
-
-
-                </p:dialog>
+            
+                <p:commandButton value="View suspended" icon="pi pi-check" rendered="#{employeeController.isAdmin}" actionListener="#{employeeController.viewSuspended()}"
+                                 update="form manage-user-content" styleClass="ui-button-success" style="margin-right: .10rem">
+                    <p:resetInput target=":form:manage-user-content"/>
+                </p:commandButton>
                 
                  <p:dialog header="Add feedback" showEffect="fade" modal="true"
                           widgetVar="addPEFeedback" responsive="true">
@@ -241,7 +155,6 @@
                                          update="form add-pe-feedback" process="add-pe-feedback @this"/>
                         
                         
-
                     </f:facet>
 
                 </p:dialog>
@@ -250,26 +163,24 @@
                           widgetVar="updatePEFeedback" responsive="true">
                     <p:outputPanel id="update-pe-feedback" class="ui-fluid">
 
-                        <p:outputPanel>
 
-                            <div class="p-field2">
-                                <p:outputLabel for="namePE2">Name</p:outputLabel>
-                                <p:inputText id="namePE2" value="#{projectController.selectedFeedback.name}"/>
-                            </div>
-                            <div class="p-field2">
-                                <p:outputLabel for="descriptionPE2">Description</p:outputLabel>
-                                <p:inputText id="descriptionPE2" value="#{projectController.selectedFeedback.description}"/>
-                            </div>
-                            <div class="p-field2">
-                                <p:outputLabel for="statusPE2">Status</p:outputLabel>
-                                <p:selectOneMenu id="statusPE2" value="#{projectController.selectedFeedback.idStatus}">
+                        <div class="p-field2">
+                            <p:outputLabel for="namePE2">Name</p:outputLabel>
+                            <p:inputText id="namePE2" value="#{projectController.selectedFeedback.name}"/>
+                        </div>
+                        <div class="p-field2">
+                            <p:outputLabel for="descriptionPE2">Description</p:outputLabel>
+                            <p:inputText id="descriptionPE2" value="#{projectController.selectedFeedback.description}"/>
+                        </div>
+                        <div class="p-field2">
+                            <p:outputLabel for="statusPE2">Status</p:outputLabel>
+                            <p:selectOneMenu id="statusPE2" value="#{projectController.selectedFeedback.idStatus}">
 
-                                    <f:selectItem itemLabel="Pending" itemValue="18"/>
-                                    <f:selectItem itemLabel="Completed" itemValue="19"/> 
-                                    <f:selectItem itemLabel="Failed" itemValue="20"/> 
-                                </p:selectOneMenu>
-                            </div>
-                        </p:outputPanel>
+                                <f:selectItem itemLabel="Pending" itemValue="18"/>
+                                <f:selectItem itemLabel="Completed" itemValue="19"/> 
+                                <f:selectItem itemLabel="Failed" itemValue="20"/> 
+                            </p:selectOneMenu>
+                        </div>
 
                     </p:outputPanel>
                     <f:facet name="footer">
@@ -282,16 +193,6 @@
                     </f:facet>
 
                 </p:dialog>
-                
-                
-                
-                
-
-
-                <p:commandButton value="View suspended" icon="pi pi-check" rendered="#{employeeController.isAdmin}" actionListener="#{employeeController.viewSuspended()}"
-                                 update="form manage-user-content" styleClass="ui-button-success" style="margin-right: .10rem">
-                    <p:resetInput target=":form:manage-user-content"/>
-                </p:commandButton>
 
 
 
@@ -299,64 +200,62 @@
                           widgetVar="manageUserDialog" responsive="true">
                     <p:outputPanel id="manage-user-content" class="ui-fluid">
 
-                        <p:outputPanel>
-                            <div class="p-field">
-                                <p:outputLabel for="name">Name</p:outputLabel>
-                                <p:inputText id="name" value="#{employeeController.selectedEmployee.firstName}"/>
-                            </div>
-                            <div class="p-field">
-                                <p:outputLabel for="lastName">LastName</p:outputLabel>
-                                <p:inputText id="lastName" value="#{employeeController.selectedEmployee.lastName}"/>
-                            </div>
-                            <div class="p-field">
-                                <p:outputLabel for="identification">identification</p:outputLabel>
-                                <p:inputText id="identification" value="#{employeeController.selectedEmployee.identification}"/>
-                            </div>
-                            <div class="p-field">
-                                <p:outputLabel for="email">Email</p:outputLabel>
-                                <p:inputText id="email" value="#{employeeController.selectedEmployee.email}"/>
-                            </div>
-                            <div class="p-field">
-                                <p:outputLabel for="phone">Phone</p:outputLabel>
-                                <p:inputText id="phone" value="#{employeeController.selectedEmployee.phone}"/>
-                            </div>
+                        <div class="p-field">
+                            <p:outputLabel for="name">Name</p:outputLabel>
+                            <p:inputText id="name" value="#{employeeController.selectedEmployee.firstName}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="lastName">LastName</p:outputLabel>
+                            <p:inputText id="lastName" value="#{employeeController.selectedEmployee.lastName}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="identification">identification</p:outputLabel>
+                            <p:inputText id="identification" value="#{employeeController.selectedEmployee.identification}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="email">Email</p:outputLabel>
+                            <p:inputText id="email" value="#{employeeController.selectedEmployee.email}"/>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="phone">Phone</p:outputLabel>
+                            <p:inputText id="phone" value="#{employeeController.selectedEmployee.phone}"/>
+                        </div>
 
-                            <div class="p-field">
-                                <p:outputLabel for="password">Password</p:outputLabel>
-                                <p:inputText id="password" value="#{employeeController.selectedEmployee.password}"/>
-                            </div>
+                        <div class="p-field">
+                            <p:outputLabel for="password">Password</p:outputLabel>
+                            <p:inputText id="password" value="#{employeeController.selectedEmployee.password}"/>
+                        </div>
 
-                            <div class="p-field">
-                                <p:outputLabel for="type">Type</p:outputLabel>
-                                <p:selectOneMenu id="type" value="#{employeeController.selectedEmployee.type}">
-                                    <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <f:selectItem itemLabel="Admin" itemValue="1"/>
-                                    <f:selectItem itemLabel="Manager" itemValue="2"/> 
-                                    <f:selectItem itemLabel="Employee" itemValue="3"/> 
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="p-field">
-                                <p:outputLabel for="status">Status</p:outputLabel>
-                                <p:selectOneMenu id="status" value="#{employeeController.selectedEmployee.status}">
-                                    <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <f:selectItem itemLabel="Inactive" itemValue="4"/>
-                                    <f:selectItem itemLabel="Active" itemValue="5"/> 
+                        <div class="p-field">
+                            <p:outputLabel for="type">Type</p:outputLabel>
+                            <p:selectOneMenu id="type" value="#{employeeController.selectedEmployee.type}">
+                                <f:selectItem itemLabel="Select One" itemValue=""/>
+                                <f:selectItem itemLabel="Admin" itemValue="1"/>
+                                <f:selectItem itemLabel="Manager" itemValue="2"/> 
+                                <f:selectItem itemLabel="Employee" itemValue="3"/> 
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="status">Status</p:outputLabel>
+                            <p:selectOneMenu id="status" value="#{employeeController.selectedEmployee.status}">
+                                <f:selectItem itemLabel="Select One" itemValue=""/>
+                                <f:selectItem itemLabel="Inactive" itemValue="4"/>
+                                <f:selectItem itemLabel="Active" itemValue="5"/> 
 
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="p-field">
-                                <p:outputLabel for="supervisor">Supervisor</p:outputLabel>
-                                <p:selectOneMenu id="supervisor" value="#{employeeController.selectedEmployee.idSupervisor}"
-                                                 label="Supervisor">
-                                    <f:selectItem itemLabel=" " itemValue=""/>
-                                    <f:selectItems value="#{employeeController.supervisor}" var="Employee"
-                                                   itemLabel="#{Employee.firstName}" itemValue="#{Employee.id}"/>
-                                </p:selectOneMenu>
-                            </div>
-
-                        </p:outputPanel>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel for="supervisor">Supervisor</p:outputLabel>
+                            <p:selectOneMenu id="supervisor" value="#{employeeController.selectedEmployee.idSupervisor}"
+                                             label="Supervisor">
+                                <f:selectItem itemLabel=" " itemValue=""/>
+                                <f:selectItems value="#{employeeController.supervisor}" var="Employee"
+                                               itemLabel="#{Employee.firstName}" itemValue="#{Employee.id}"/>
+                            </p:selectOneMenu>
+                        </div>
 
                     </p:outputPanel>
+                    
                     <f:facet name="footer">
                         <p:commandButton value="Add" icon="pi pi-check"   actionListener="#{employeeController.saveUser()}" 
                                          update="form manage-user-content" process="manage-user-content @this">
@@ -452,7 +351,7 @@
 
                         <p:dataTable var="Employee" value="#{employeeController.getSubordinates(employeeController.id)}"  paginator="true" rows="3" paginatorTemplate="{CurrentPageReport} 
                                      {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     emptyMessage="No register users"  >
+                                     emptyMessage="No register users" paginatorPosition="bottom" >
 
 
                             <p:column headerText="Name" sortBy="#{Employee.fullName}" filterBy="#{Employee.fullName}" filterMatchMode="contains">
@@ -510,8 +409,7 @@
                     </p:outputPanel>  
 
                 </p:dialog>
-
-            </div>           
+      
         </h:form>
     </h:body>
 </html>

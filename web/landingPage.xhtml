@@ -3,68 +3,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h3>Welcome to HTH,  #{employeeController.firstName}</h3>
         <p:growl id="message" showDetail="true"/>
+        
+        <h:form id="menu">
+            <ui:include src="menu.xhtml"/>
+        </h:form>
+        
         <h:form id="form">
             <p:growl id="message" showDetail="true"/>
-            <div class="card">
+            <p:panelGrid columns="2">
 
-                <p:tabMenu activeIndex="#{param.i}">
-                    <p:menuitem value="Home" outcome="landingPage" icon="pi pi-fw pi-home">
-                        <f:param name="i" value="0"/>
-                    </p:menuitem>
-                    <p:menuitem value="Users" outcome="user" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="1"/>
-                    </p:menuitem>
-                    
-                    <p:menuitem value="Vacations" outcome="vacations" icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="3"/>
-                    </p:menuitem>
-                    
-                    <p:menuitem value="Documents" outcome="documents" icon="pi pi-fw pi-file">
-                        <f:param name="i" value="5"/>
-                    </p:menuitem>
-                    <p:menuitem value="Log Out" icon="pi pi-sign-out"  actionListener="#{employeeController.logOut()}">
-                        <f:param name="i" value="6"/>
-                    </p:menuitem>
+                <h:outputText value="Name:"/>
+                <h:outputText value="#{employeeController.firstName}   #{employeeController.lastname}"/>
 
-                </p:tabMenu>
+                <h:outputText value="Identification"/>
+                <h:outputText value="#{employeeController.identification} "/>
 
+                <h:outputText value="Email"/>
+                <h:outputText value="#{employeeController.email} "/>
 
-                <p:panelGrid columns="2">
+                <h:outputText value="Vacation Days Available"/>
+                <h:outputText value="#{ vacationController.getVacationDaysOff(employeeController.id) + vacationController.getVacationDaysOfEmployee(employeeController.id)}"/>
 
-                    <h:outputText value="Name:"/>
-                    <h:outputText value="#{employeeController.firstName}   #{employeeController.lastname}"/>
+                <h:outputText value="Phone"/>
+                <h:outputText value="#{employeeController.phone} "/>
 
-                    <h:outputText value="Identification"/>
-                    <h:outputText value="#{employeeController.identification} "/>
+                <h:outputText value="Type"/>
+                <h:outputText value="#{employeeController.typeToStrType(employeeController.type)} "/>
 
-                    <h:outputText value="Email"/>
-                    <h:outputText value="#{employeeController.email} "/>
-                    
-                    <h:outputText value="Vacation Days Available"/>
-                    <h:outputText value="#{ vacationController.getVacationDaysOff(employeeController.id) + vacationController.getVacationDaysOfEmployee(employeeController.id)}"/>
+                <h:outputText value="Employment Day"/>
+                <h:outputText value="#{employeeController.employmentDay} "/>
 
-                    <h:outputText value="Phone"/>
-                    <h:outputText value="#{employeeController.phone} "/>
+                <h:outputText value="Supervisor" rendered="#{employeeController.isManager || employeeController.isEmployee}"/>
+                <h:outputText value="#{employeeController.idToStringEmployeeName(employeeController.idSupervisor)} "/>
 
-                    <h:outputText value="Type"/>
-                    <h:outputText value="#{employeeController.typeToStrType(employeeController.type)} "/>
-
-                    <h:outputText value="Employment Day"/>
-                    <h:outputText value="#{employeeController.employmentDay} "/>
-
-                    <h:outputText value="Supervisor" rendered="#{employeeController.isManager || employeeController.isEmployee}"/>
-                    <h:outputText value="#{employeeController.idToStringEmployeeName(employeeController.idSupervisor)} "/>
-
-                </p:panelGrid>
-
-            </div>           
+            </p:panelGrid>   
         </h:form>
     </h:body>
 </html>
