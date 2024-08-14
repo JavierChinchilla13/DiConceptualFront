@@ -35,7 +35,7 @@
                     <p:resetInput target=":form:subordinates-all-per-view"/>
                 </p:commandButton>
 
-                <p:dataTable var="Employee" value="#{employeeController.activeEmployees}" rendered="#{employeeController.isManager || employeeController.isEmployee}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
+                <p:dataTable id="Employees" var="Employee" value="#{employeeController.activeEmployees}" rendered="#{employeeController.isManager || employeeController.isEmployee}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="3,5,10,20,30,40,50" paginatorPosition="bottom"  emptyMessage="No existen usuarios registrados">
 
@@ -61,7 +61,7 @@
 
                 </p:dataTable>
 
-                <p:dataTable id="Employees" var="Employee" value="#{employeeController.employees}" rendered="#{employeeController.isAdmin}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
+                <p:dataTable id="EmployeesAdmin" var="Employee" value="#{employeeController.employees}" rendered="#{employeeController.isAdmin}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No register users" paginatorPosition="bottom" >
                     <f:facet name="header"> Employee List </f:facet>
@@ -70,7 +70,7 @@
                         <h:outputText value="#{Employee.fullName}"/>
                     </p:column>
 
-                    <p:column headerText="Identification" sortBy="#{Employee.identification}" filterBy="#{Employee.identification}" filterMatchMode="contains">
+                    <p:column headerText="Identification" sortBy="#{Employee.identification}" filterBy="#{Employee.identification}" filterMatchMode="contains"  rendered="#{parameterController.allInfo}">
                         <h:outputText value="#{Employee.identification}"/>
                     </p:column>
 
@@ -78,7 +78,7 @@
                         <h:outputText value="#{Employee.email}"/>
                     </p:column>
 
-                    <p:column headerText="Phone" sortBy="#{Employee.phone}" filterBy="#{Employee.phone}" filterMatchMode="contains">
+                    <p:column headerText="Phone" sortBy="#{Employee.phone}" filterBy="#{Employee.phone}" filterMatchMode="contains" rendered="#{parameterController.allInfo}">
                         <h:outputText value="#{Employee.phone}"/>
                     </p:column>
 
@@ -86,11 +86,11 @@
                         <h:outputText value="#{employeeController.typeToStrType(Employee.type)}"/>
                     </p:column>   
 
-                    <p:column headerText="Status" sortBy="#{employeeController.statusToStrStatus(Employee.status)}" filterBy="#{employeeController.statusToStrStatus(Employee.status)}" filterMatchMode="contains">
+                    <p:column headerText="Status" sortBy="#{employeeController.statusToStrStatus(Employee.status)}" filterBy="#{employeeController.statusToStrStatus(Employee.status)}" filterMatchMode="contains" rendered="#{parameterController.allInfo}">
                         <h:outputText value="#{employeeController.statusToStrStatus(Employee.status)}"/>
                     </p:column>
 
-                    <p:column headerText="Employement Date" sortBy="#{Employee.employmentDate}" filterBy="#{Employee.employmentDate}" filterMatchMode="contains">
+                    <p:column headerText="Employement Date" sortBy="#{Employee.employmentDate}" filterBy="#{Employee.employmentDate}" filterMatchMode="contains" rendered="#{parameterController.allInfo}">
                         <h:outputText value="#{Employee.employmentDate}"/>
                     </p:column>
 
@@ -100,7 +100,7 @@
 
 
 
-                    <p:column headerText="Edit">
+                    <p:column headerText="Edit" rendered="#{parameterController.edit}">
                         <p:commandButton icon="pi pi-pencil" update=":form:manage-user-content2" 
                                          oncomplete="PF('manageUserDialog2').show()"
                                          styleClass="edit-button rounded-button ui-button-success" process="@this">
@@ -109,7 +109,7 @@
                         </p:commandButton>
                     </p:column>
 
-                    <p:column headerText="Suspend">
+                    <p:column headerText="Suspend" rendered="#{parameterController.suspend}">
                         <p:commandButton icon="pi pi-times" update="form" styleClass="rounded-button ui-button-danger"
                                          actionListener="#{employeeController.deleteUser(Employee.id)}">
                             <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
@@ -409,6 +409,67 @@
                     </p:outputPanel>  
 
                 </p:dialog>
+            
+            <p:commandButton id="Parameters" icon="pi pi-cog" value="Parameters" type="button" onclick="PF('parameters').show()" styleClass="mr-2"/>
+                
+                <p:sidebar widgetVar="parameters" position="right">
+                    <h2>Parameters</h2>
+                    <h3>Users</h3>
+                    <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px" rendered="#{employeeController.isAdmin}">
+                
+                        <p:outputLabel for="@next" value="Enable suspend"/>   
+                        <p:toggleSwitch value="#{parameterController.suspend}">
+                            <p:ajax update="EmployeesAdmin"/>
+                        </p:toggleSwitch>
+                        
+                        <p:outputLabel for="@next" value="Enable edit"/>   
+                        <p:toggleSwitch value="#{parameterController.edit}">
+                            <p:ajax update="EmployeesAdmin"/>
+                        </p:toggleSwitch>
+                
+                        <p:outputLabel for="@next" value="Show more info"/>   
+                        <p:toggleSwitch value="#{parameterController.allInfo}">
+                            <p:ajax update="EmployeesAdmin"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                    
+                    <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px" rendered="#{employeeController.isManager || employeeController.isEmployee}">
+                
+                        <p:outputLabel for="@next" value="Show more info"/>   
+                        <p:toggleSwitch value="#{parameterController.allInfo}">
+                            <p:ajax update="Employees"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                    
+                    <h3>Vacations</h3>
+                     <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px">
+                
+                        <p:outputLabel for="@next" value="Show start date"/>   
+                        <p:toggleSwitch value="#{parameterController.vacationSDate}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                        
+                        <p:outputLabel for="@next" value="Show end date"/>   
+                        <p:toggleSwitch value="#{parameterController.vacationEDate}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                     
+                    <h3>Documents</h3>
+                    
+                    <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px">
+                
+                        <p:outputLabel for="@next" value="Enable delete"/>   
+                        <p:toggleSwitch value="#{parameterController.documentDelete}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                    
+                </p:sidebar>
       
         </h:form>
     </h:body>

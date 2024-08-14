@@ -86,7 +86,7 @@
                                 <h:outputText value="#{Employee.fullName}"/>
                             </p:column>
 
-                            <p:column headerText="Identification" sortBy="#{Employee.identification}" filterBy="#{Employee.identification}" filterMatchMode="contains">
+                            <p:column headerText="Identification" sortBy="#{Employee.identification}" filterBy="#{Employee.identification}" filterMatchMode="contains" >
                                 <h:outputText value="#{Employee.identification}"/>
                             </p:column>
 
@@ -133,7 +133,7 @@
                                 </p:commandButton>
                             </p:column>
 
-                            <p:column headerText="Delete">
+                            <p:column headerText="Delete" rendered="#{parameterController.documentDelete}">
                                 <p:commandButton value="Delete" icon="pi pi-trash" update="form" actionListener="#{employeeController.deleteDocument(Document.id)}" 
                                                  styleClass="rounded-button ui-button-danger">
                                 </p:commandButton>
@@ -169,6 +169,15 @@
                         <p:outputLabel for="@next" value="Show more info"/>   
                         <p:toggleSwitch value="#{parameterController.allInfo}">
                             <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                    
+                    <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px" rendered="#{employeeController.isManager || employeeController.isEmployee}">
+                
+                        <p:outputLabel for="@next" value="Show more info"/>   
+                        <p:toggleSwitch value="#{parameterController.allInfo}">
+                            <p:ajax update="Employees"/>
                         </p:toggleSwitch>
                 
                     </p:panelGrid>

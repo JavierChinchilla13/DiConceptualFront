@@ -61,15 +61,15 @@
                     </f:facet>
                 </p:dialog>
 
-                <p:dataTable var="vacations" value="#{vacationController.getNewScheduleVacations(employeeController.id)}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
+                <p:dataTable id="Vacations" var="vacations" value="#{vacationController.getNewScheduleVacations(employeeController.id)}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="3,5,10,20,30,40,50" paginatorPosition="bottom"  emptyMessage="No Vacations">
 
-                    <p:column headerText="Start Date" sortBy="#{vacations.startDate}" filterBy="#{vacations.startDate}" filterMatchMode="contains">
+                    <p:column headerText="Start Date" sortBy="#{vacations.startDate}" filterBy="#{vacations.startDate}" filterMatchMode="contains" rendered="#{parameterController.vacationSDate}">
                         <h:outputText value="#{vacations.startDate}"/>
                     </p:column>
 
-                    <p:column headerText="End Date" sortBy="#{vacations.endDate}" filterBy="#{vacations.endDate}" filterMatchMode="contains">
+                    <p:column headerText="End Date" sortBy="#{vacations.endDate}" filterBy="#{vacations.endDate}" filterMatchMode="contains" rendered="#{parameterController.vacationEDate}">
                         <h:outputText value="#{vacations.endDate}"/>
                     </p:column>
 
@@ -104,11 +104,11 @@
                                      {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      emptyMessage="No Vacations" paginatorPosition="bottom">
 
-                            <p:column headerText="Start Date" sortBy="#{Vacation.startDate}" filterBy="#{Vacation.startDate}" filterMatchMode="contains">
+                            <p:column headerText="Start Date" sortBy="#{Vacation.startDate}" filterBy="#{Vacation.startDate}" filterMatchMode="contains"  rendered="#{parameterController.vacationSDate}">
                                 <h:outputText value="#{Vacation.startDate}"/>
                             </p:column>
 
-                            <p:column headerText="End Date" sortBy="#{Vacation.endDate}" filterBy="#{Vacation.endDate}" filterMatchMode="contains">
+                            <p:column headerText="End Date" sortBy="#{Vacation.endDate}" filterBy="#{Vacation.endDate}" filterMatchMode="contains"  rendered="#{parameterController.vacationEDate}">
                                 <h:outputText value="#{Vacation.endDate}"/>
                             </p:column>
 
@@ -128,6 +128,68 @@
 
 
                 </p:dialog>
+                
+                
+                <p:commandButton id="Parameters" icon="pi pi-cog" value="Parameters" type="button" onclick="PF('parameters').show()" styleClass="mr-2"/>
+                
+                <p:sidebar widgetVar="parameters" position="right">
+                    <h2>Parameters</h2>
+                    <h3>Users</h3>
+                    <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px" rendered="#{employeeController.isAdmin}">
+                
+                        <p:outputLabel for="@next" value="Enable suspend"/>   
+                        <p:toggleSwitch value="#{parameterController.suspend}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                        
+                        <p:outputLabel for="@next" value="Enable edit"/>   
+                        <p:toggleSwitch value="#{parameterController.edit}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                
+                        <p:outputLabel for="@next" value="Show more info"/>   
+                        <p:toggleSwitch value="#{parameterController.allInfo}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                    
+                    <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px" rendered="#{employeeController.isManager || employeeController.isEmployee}">
+                
+                        <p:outputLabel for="@next" value="Show more info"/>   
+                        <p:toggleSwitch value="#{parameterController.allInfo}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                    
+                    <h3>Vacations</h3>
+                     <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px">
+                
+                        <p:outputLabel for="@next" value="Show start date"/>   
+                        <p:toggleSwitch value="#{parameterController.vacationSDate}">
+                            <p:ajax update="Vacations"/>
+                        </p:toggleSwitch>
+                        
+                        <p:outputLabel for="@next" value="Show end date"/>   
+                        <p:toggleSwitch value="#{parameterController.vacationEDate}">
+                            <p:ajax update="Vacations"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                     
+                    <h3>Documents</h3>
+                    
+                    <p:panelGrid columns="2" layout="tabular" styleClass="ui-panelgrid-blank ui-fluid" style="margin-top:20px">
+                
+                        <p:outputLabel for="@next" value="Enable delete"/>   
+                        <p:toggleSwitch value="#{parameterController.documentDelete}">
+                            <p:ajax update="Parameters"/>
+                        </p:toggleSwitch>
+                
+                    </p:panelGrid>
+                    
+                </p:sidebar>
 
             </div>           
         </h:form>
