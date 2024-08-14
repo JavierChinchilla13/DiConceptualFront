@@ -20,6 +20,7 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.edu.ulatina.HTH_DB_Connetion-1.0-SNAPSHOT.jar}</file>
+
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
