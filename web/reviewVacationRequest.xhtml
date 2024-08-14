@@ -42,8 +42,8 @@
                         <h:outputText value="#{Vacation.endDate}"/>
                     </p:column>
 
-                    <p:column headerText="Status" sortBy="#{Vacation.idStatus}" filterBy="#{Vacation.idStatus}" filterMatchMode="contains">
-                        <h:outputText value="#{Vacation.idStatus}"/>
+                    <p:column headerText="Status" sortBy="#{vacationController.statusToStrStatus(Vacation.idStatus)}" filterBy="#{vacationController.statusToStrStatus(Vacation.idStatus)}" filterMatchMode="contains">
+                        <h:outputText value="#{vacationController.statusToStrStatus(Vacation.idStatus)}"/>
                     </p:column>
 
                     <p:column headerText="Description" sortBy="#{Vacation.description}" filterBy="#{Vacation.description}" filterMatchMode="contains">
