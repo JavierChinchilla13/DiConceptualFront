@@ -102,7 +102,7 @@
 
                         <p:dataTable var="Vacation" value="#{vacationController.getOldScheduleVacations(employeeController.id)}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                                      {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     emptyMessage="No Vacations">
+                                     emptyMessage="No Vacations" paginatorPosition="bottom">
 
                             <p:column headerText="Start Date" sortBy="#{Vacation.startDate}" filterBy="#{Vacation.startDate}" filterMatchMode="contains">
                                 <h:outputText value="#{Vacation.startDate}"/>
