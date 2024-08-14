@@ -39,7 +39,7 @@
 
                 <p:dataTable var="Document" value="#{employeeController.getDocumentsOf(employeeController.id)}" paginator="true" rows="5" paginatorTemplate="{CurrentPageReport} 
                              {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No documets">
+                             rowsPerPageTemplate="3,5,10,20,30,40,50" emptyMessage="No documets" paginatorPosition="bottom" >
 
                     <p:column headerText="Name" sortBy="#{Document.name}" filterBy="#{Document.name}" filterMatchMode="contains">
                         <h:outputText value="#{Document.name}"/>
